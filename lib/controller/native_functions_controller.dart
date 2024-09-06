@@ -1,0 +1,27 @@
+import 'package:flutter/services.dart';
+
+class NativeFunctionsController {
+  static const _focusNativeBridge =
+      MethodChannel("focus-native-kotlin-channel");
+
+  NativeFunctionsController._();
+
+  static final NativeFunctionsController instance =
+      NativeFunctionsController._();
+
+  Future<bool> hasOverlayPermission() async {
+    return await _focusNativeBridge.invokeMethod("hasOverlayPermission");
+  }
+
+  Future<void> requestOverlayPermission() async {
+    await _focusNativeBridge.invokeMethod("requestOverlayPermission");
+  }
+
+  Future<bool> hasUsageStatsPermission() async {
+    return await _focusNativeBridge.invokeMethod("hasUsageStatsPermission");
+  }
+
+  Future<void> requestUsageStatsPermission() async {
+    await _focusNativeBridge.invokeMethod("requestUsageStatsPermission");
+  }
+}
