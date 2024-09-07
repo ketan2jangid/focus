@@ -6,8 +6,8 @@ import 'package:focus/view/widgets/schedule_cards.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeTab extends StatelessWidget {
+  const HomeTab({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,6 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             ),
-            Navbar(),
           ],
         ),
       ),

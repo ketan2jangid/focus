@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:focus/controller/native_functions_controller.dart';
-import 'package:focus/view/screens/home_screen.dart';
+import 'package:focus/view/screens/focus_home.dart';
+import 'package:focus/view/screens/home_tab.dart';
 import 'package:focus/view/widgets/buttons.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -120,7 +121,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => HomeScreen(),
+                                    builder: (context) => FocusHome(),
                                   ),
                                 );
                                 break;

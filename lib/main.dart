@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:focus/view/screens/schedule_apps_selector_screen.dart';
-import 'package:focus/view/screens/home_screen.dart';
+import 'package:focus/view/screens/home_tab.dart';
 import 'package:focus/view/screens/permission_screen.dart';
 import 'package:focus/view/screens/schedule_active_screen.dart';
 import 'package:focus/view/screens/schedule_completed_screen.dart';

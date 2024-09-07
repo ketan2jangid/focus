@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/buttons.dart';
 import '../widgets/header.dart';
-import 'home_screen.dart';
+import 'home_tab.dart';
 
 class ScheduleCompletedScreen extends StatelessWidget {
   const ScheduleCompletedScreen({super.key});
@@ -61,7 +61,7 @@ class ScheduleCompletedScreen extends StatelessWidget {
                 onTap: () => Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomeScreen(),
+                        builder: (context) => HomeTab(),
                       ),
                     ),
                 text: "home"),
