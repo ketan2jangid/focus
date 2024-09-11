@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:focus/view/screens/focus_home.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -61,7 +62,7 @@ class ScheduleCompletedScreen extends StatelessWidget {
                 onTap: () => Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomeTab(),
+                        builder: (context) => FocusHome(),
                       ),
                     ),
                 text: "home"),

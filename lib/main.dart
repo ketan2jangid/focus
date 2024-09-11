@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:focus/data/local_database.dart';
 import 'package:focus/view/screens/schedule_apps_selector_screen.dart';
 import 'package:focus/view/screens/home_tab.dart';
 import 'package:focus/view/screens/permission_screen.dart';
@@ -11,7 +12,9 @@ import 'package:focus/view/screens/schedule_summary_screen.dart';
 
 /// TODO: UPDATE README.md
 
-void main() {
+void main() async {
+  await LocalDatabase.initialize();
+
   runApp(const MyApp());
 }
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:focus/view/screens/focus_home.dart';
 import 'package:focus/view/screens/home_tab.dart';
 import 'package:focus/view/widgets/header.dart';
 import 'package:gap/gap.dart';
@@ -53,7 +54,7 @@ class ScheduleEndedScreen extends StatelessWidget {
               onTap: () => Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HomeTab(),
+                  builder: (context) => FocusHome(),
                 ),
               ),
               text: "home",

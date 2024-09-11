@@ -18,7 +18,7 @@ class _FocusHomeState extends State<FocusHome> {
   void initState() {
     super.initState();
 
-    _pageController = PageController(initialPage: 0);
+    _pageController = PageController(initialPage: 0, keepPage: true);
   }
 
   @override
