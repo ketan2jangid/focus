@@ -16,7 +16,7 @@ class HomeTab extends StatefulWidget {
   State<HomeTab> createState() => _HomeTabState();
 }
 
-class _HomeTabState extends State<HomeTab> {
+class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
   List<Schedule>? _savedSchedules;
 
   @override
@@ -36,6 +36,8 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0)
@@ -50,13 +52,20 @@ class _HomeTabState extends State<HomeTab> {
               subtitle: "get rid of chaos",
             ),
             Gap(16),
-
-            // TODO: MOVE CARDS TO SINGLE WIDGET - SCHEDULECARDS
-            if (_savedSchedules == null) const LinearProgressIndicator(),
+            if (_savedSchedules == null) ...[
+              Spacer(),
+              const LinearProgressIndicator(
+                color: Color(0xFF1E1E1E),
+              ),
+              Spacer(),
+            ],
             if (_savedSchedules != null) ...[
               Expanded(
-                child: SchedulesWidget(
-                  schedules: _savedSchedules!,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 2.0),
+                  child: SchedulesWidget(
+                    schedules: _savedSchedules!,
+                  ),
                 ),
               ),
             ]
@@ -65,4 +74,7 @@ class _HomeTabState extends State<HomeTab> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

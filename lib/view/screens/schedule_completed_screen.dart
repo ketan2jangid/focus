@@ -8,7 +8,8 @@ import '../widgets/header.dart';
 import 'home_tab.dart';
 
 class ScheduleCompletedScreen extends StatelessWidget {
-  const ScheduleCompletedScreen({super.key});
+  final String scheduleName;
+  const ScheduleCompletedScreen({super.key, required this.scheduleName});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class ScheduleCompletedScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gap(36),
-            Header(title: "work schedule"),
+            Header(title: "$scheduleName schedule"),
             Spacer(
               flex: 2,
             ),

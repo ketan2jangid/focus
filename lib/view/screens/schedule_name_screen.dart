@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:focus/controller/schedule_controller.dart';
 import 'package:focus/view/screens/schedule_apps_selector_screen.dart';
 import 'package:focus/view/widgets/buttons.dart';
 import 'package:focus/view/widgets/header.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleNameScreen extends StatefulWidget {
   const ScheduleNameScreen({super.key});
@@ -88,12 +90,17 @@ class _ScheduleNameScreenState extends State<ScheduleNameScreen> {
             Spacer(),
             PrimaryButton(
                 disable: _nameController.text.isEmpty,
-                onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ScheduleAppsSelectorScreen(),
-                      ),
+                onTap: () {
+                  context.read<ScheduleController>().scheduleName =
+                      _nameController.text.trim();
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ScheduleAppsSelectorScreen(),
                     ),
+                  );
+                },
                 text: "next"),
           ],
         ),

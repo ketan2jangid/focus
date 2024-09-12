@@ -7,7 +7,11 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ScheduleActiveScreen extends StatefulWidget {
-  const ScheduleActiveScreen({super.key});
+  final String scheduleName;
+  final int scheduleDuration;
+
+  const ScheduleActiveScreen(
+      {super.key, required this.scheduleName, required this.scheduleDuration});
 
   @override
   State<ScheduleActiveScreen> createState() => _ScheduleActiveScreenState();
@@ -27,7 +31,7 @@ class _ScheduleActiveScreenState extends State<ScheduleActiveScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gap(36),
-            Header(title: "work schedule"),
+            Header(title: widget.scheduleName + " schedule"),
             Spacer(),
             Center(
               child: Column(
@@ -47,7 +51,7 @@ class _ScheduleActiveScreenState extends State<ScheduleActiveScreen> {
                   ),
                   Gap(24),
                   Text(
-                    "10 min",
+                    "${(widget.scheduleDuration / 60).truncate()} min",
                     style: GoogleFonts.montserrat(
                       color: Color(0xFF1E1E1E),
                       fontSize: 16,
@@ -62,7 +66,9 @@ class _ScheduleActiveScreenState extends State<ScheduleActiveScreen> {
               onTap: () => Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ScheduleCompletedScreen(),
+                  builder: (context) => ScheduleCompletedScreen(
+                    scheduleName: widget.scheduleName,
+                  ),
                 ),
               ),
               text: "end now",

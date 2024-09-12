@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:focus/controller/schedule_controller.dart';
 import 'package:focus/data/local_database.dart';
 import 'package:focus/view/screens/schedule_apps_selector_screen.dart';
 import 'package:focus/view/screens/home_tab.dart';
@@ -9,6 +10,7 @@ import 'package:focus/view/screens/schedule_duration_screen.dart';
 import 'package:focus/view/screens/schedule_ended_screen.dart';
 import 'package:focus/view/screens/schedule_name_screen.dart';
 import 'package:focus/view/screens/schedule_summary_screen.dart';
+import 'package:provider/provider.dart';
 
 /// TODO: UPDATE README.md
 
@@ -23,13 +25,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Focus',
-      theme: ThemeData.light().copyWith(
-        scaffoldBackgroundColor: Colors.white,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => ScheduleController(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Focus',
+        theme: ThemeData.light().copyWith(
+          scaffoldBackgroundColor: Colors.white,
+        ),
+        home: const PermissionScreen(),
       ),
-      home: const PermissionScreen(),
     );
   }
 }

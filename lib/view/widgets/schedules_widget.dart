@@ -20,8 +20,7 @@ class SchedulesWidget extends StatelessWidget {
                 child: (schedules.isEmpty)
                     ? AddScheduleCard()
                     : ScheduleCard(
-                        title: schedules[0].name!,
-                        appsSelected: schedules[0].apps!.length,
+                        scheduleData: schedules[0],
                         cardColor: Color(0xFFEFEFDD),
                       ),
               ),
@@ -30,8 +29,7 @@ class SchedulesWidget extends StatelessWidget {
                 child: (schedules.length < 2)
                     ? AddScheduleCard()
                     : ScheduleCard(
-                        title: schedules[1].name!,
-                        appsSelected: schedules[1].apps!.length,
+                        scheduleData: schedules[1],
                         cardColor: Color(0xFFEADDEF),
                       ),
               ),
@@ -46,8 +44,7 @@ class SchedulesWidget extends StatelessWidget {
                 child: (schedules.length < 3)
                     ? AddScheduleCard()
                     : ScheduleCard(
-                        title: schedules[2].name!,
-                        appsSelected: schedules[2].apps!.length,
+                        scheduleData: schedules[2],
                         cardColor: Color(0xFFDDEDEF),
                       ),
               ),
@@ -56,8 +53,7 @@ class SchedulesWidget extends StatelessWidget {
                 child: (schedules.length < 4)
                     ? AddScheduleCard()
                     : ScheduleCard(
-                        title: schedules[3].name!,
-                        appsSelected: schedules[3].apps!.length,
+                        scheduleData: schedules[3],
                         cardColor: Color(0xFFEFDDDD),
                       ),
               ),

@@ -37,7 +37,7 @@ class _FocusHomeState extends State<FocusHome> {
             activeTab: activeTab,
             onPageChange: (page) {
               _pageController.animateToPage(page,
-                  duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+                  duration: Duration(milliseconds: 400), curve: Curves.linear);
               setState(() {});
             }),
       ),

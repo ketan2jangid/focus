@@ -1,20 +1,18 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:focus/model/app_data.dart';
+import 'package:focus/model/schedule.dart';
 import 'package:focus/view/screens/schedule_name_screen.dart';
 import 'package:focus/view/screens/schedule_summary_screen.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ScheduleCard extends StatelessWidget {
-  final String title;
-  final int appsSelected;
+  final Schedule scheduleData;
   final Color cardColor;
 
   const ScheduleCard(
-      {super.key,
-      required this.title,
-      required this.appsSelected,
-      required this.cardColor});
+      {super.key, required this.scheduleData, required this.cardColor});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +20,8 @@ class ScheduleCard extends StatelessWidget {
       onTap: () => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => ScheduleSummaryScreen(),
+          builder: (context) =>
+              ScheduleSummaryScreen(scheduleData: scheduleData),
         ),
       ),
       child: Container(
@@ -36,7 +35,7 @@ class ScheduleCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title.toLowerCase(),
+              scheduleData.name!.toLowerCase(),
               style: GoogleFonts.montserrat(
                 color: Color(0xFF2E2E2E),
                 fontSize: 16,
@@ -45,7 +44,7 @@ class ScheduleCard extends StatelessWidget {
             ),
             Gap(8),
             Text(
-              "$appsSelected apps selected",
+              "${scheduleData.apps!.length} apps selected",
               style: GoogleFonts.montserrat(
                 color: Color(0xFF444444),
                 fontSize: 12,

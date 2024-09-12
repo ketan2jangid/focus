@@ -1,8 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:focus/controller/schedule_controller.dart';
+import 'package:focus/model/app_data.dart';
 import 'package:focus/view/screens/schedule_duration_screen.dart';
 import 'package:gap/gap.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/buttons.dart';
 import '../widgets/header.dart';
@@ -18,7 +23,7 @@ class ScheduleAppsSelectorScreen extends StatefulWidget {
 class _ScheduleAppsSelectorScreenState
     extends State<ScheduleAppsSelectorScreen> {
   bool isLoading = false;
-  List<String> selectedApps = [];
+  List<int> selectedApps = [];
   List<AppInfo> appsList = [];
 
   @override
@@ -96,12 +101,10 @@ class _ScheduleAppsSelectorScreenState
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              if (selectedApps
-                                  .contains(appsList[index].packageName)) {
-                                selectedApps
-                                    .remove(appsList[index].packageName);
+                              if (selectedApps.contains(index)) {
+                                selectedApps.remove(index);
                               } else {
-                                selectedApps.add(appsList[index].packageName);
+                                selectedApps.add(index);
                               }
 
                               setState(() {});
@@ -120,8 +123,7 @@ class _ScheduleAppsSelectorScreenState
                                         width: 42,
                                       ),
                                     ),
-                                    if (selectedApps
-                                        .contains(appsList[index].packageName))
+                                    if (selectedApps.contains(index))
                                       Container(
                                         height: 42,
                                         width: 42,
@@ -155,12 +157,26 @@ class _ScheduleAppsSelectorScreenState
             Gap(24),
             PrimaryButton(
               disable: selectedApps.isEmpty,
-              onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ScheduleDurationScreen(),
-                ),
-              ),
+              onTap: () {
+                List<AppData> apps = [];
+
+                selectedApps.forEach((ind) {
+                  apps.add(AppData.fromJson({
+                    "name": appsList[ind].name,
+                    "package": appsList[ind].packageName,
+                    "icon": String.fromCharCodes(appsList[ind].icon!)
+                  }));
+                });
+
+                context.read<ScheduleController>().scheduleApps = apps;
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ScheduleDurationScreen(),
+                  ),
+                );
+              },
               text: "next",
             ),
           ],

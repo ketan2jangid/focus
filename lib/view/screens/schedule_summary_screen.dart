@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:focus/model/schedule.dart';
 import 'package:focus/view/screens/schedule_active_screen.dart';
 import 'package:focus/view/widgets/buttons.dart';
 import 'package:focus/view/widgets/header.dart';
@@ -6,7 +9,8 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ScheduleSummaryScreen extends StatefulWidget {
-  const ScheduleSummaryScreen({super.key});
+  final Schedule scheduleData;
+  const ScheduleSummaryScreen({super.key, required this.scheduleData});
 
   @override
   State<ScheduleSummaryScreen> createState() => _ScheduleSummaryScreenState();
@@ -26,13 +30,16 @@ class _ScheduleSummaryScreenState extends State<ScheduleSummaryScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gap(6),
-            Icon(
-              Icons.chevron_left_rounded,
-              color: Color(0xFF1E1E1E),
-              size: 32,
+            InkWell(
+              onTap: () => Navigator.pop(context),
+              child: Icon(
+                Icons.chevron_left_rounded,
+                color: Color(0xFF1E1E1E),
+                size: 32,
+              ),
             ),
             Header(
-              title: "work schedule",
+              title: widget.scheduleData.name! + " schedule",
               subtitle: "press start to begin",
             ),
             Gap(24),
@@ -62,15 +69,20 @@ class _ScheduleSummaryScreenState extends State<ScheduleSummaryScreen> {
                 height: 36,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 2,
+                  itemCount: widget.scheduleData.apps!.length,
                   itemBuilder: (context, index) {
                     return Container(
                       height: 36,
                       width: 36,
                       margin: EdgeInsets.only(right: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.grey,
-                        borderRadius: BorderRadius.circular(4),
+                      // clipBehavior: Clip.antiAlias,
+                      // decoration: BoxDecoration(
+                      //   color: Colors.grey,
+                      //   borderRadius: BorderRadius.circular(4),
+                      // ),
+                      child: Image.memory(
+                        Uint8List.fromList(
+                            widget.scheduleData.apps![index].icon!.codeUnits),
                       ),
                     );
                   },
@@ -101,7 +113,7 @@ class _ScheduleSummaryScreenState extends State<ScheduleSummaryScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
               child: Text(
-                "30 mins",
+                "${(widget.scheduleData.duration!)} mins",
                 style: GoogleFonts.montserrat(
                   color: Color(0xFF1E1E1E),
                   fontSize: 16,
@@ -117,7 +129,10 @@ class _ScheduleSummaryScreenState extends State<ScheduleSummaryScreen> {
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ScheduleActiveScreen(),
+                    builder: (context) => ScheduleActiveScreen(
+                      scheduleName: 'work',
+                      scheduleDuration: 5 * 60,
+                    ),
                   ),
                   (route) => false,
                 );
