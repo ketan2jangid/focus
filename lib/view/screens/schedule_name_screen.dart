@@ -16,6 +16,7 @@ class ScheduleNameScreen extends StatefulWidget {
 
 class _ScheduleNameScreenState extends State<ScheduleNameScreen> {
   late final TextEditingController _nameController;
+  final GlobalKey<FormState> _key = GlobalKey();
 
   @override
   void initState() {
@@ -57,33 +58,54 @@ class _ScheduleNameScreenState extends State<ScheduleNameScreen> {
               subtitle: "name this schedule",
             ),
             Gap(36),
-            TextField(
-              controller: _nameController,
-              onChanged: (val) => setState(() {}),
-              cursorColor: Color(0xFF1E1E1E),
-              decoration: InputDecoration(
-                hintText: "eg: study schedule, work schedule etc",
-                hintStyle: GoogleFonts.montserrat(
-                  color: Color(0xFF999999),
+            Form(
+              key: _key,
+              child: TextFormField(
+                controller: _nameController,
+                onChanged: (val) => setState(() {}),
+                validator: (str) {
+                  if (str != null && str.trim().contains(" ")) {
+                    return "give a single word name to schedule";
+                  }
+
+                  return null;
+                },
+                keyboardType: TextInputType.name,
+                cursorColor: Color(0xFF1E1E1E),
+                style: GoogleFonts.montserrat(
+                  color: Color(0xFF1E1E1E),
+                  fontWeight: FontWeight.w500,
                 ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                decoration: InputDecoration(
+                  hintText: "eg: study, work, meditation etc",
+                  hintStyle: GoogleFonts.montserrat(
                     color: Color(0xFF999999),
                   ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Color(0xFF444444),
-                    width: 2.0,
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF999999),
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
-                    color: Colors.red.shade800,
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Color(0xFF444444),
+                      width: 2.0,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  borderRadius: BorderRadius.circular(12),
+                  focusedErrorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.red.shade800,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  errorBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.red.shade800,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
               ),
             ),
@@ -91,8 +113,12 @@ class _ScheduleNameScreenState extends State<ScheduleNameScreen> {
             PrimaryButton(
                 disable: _nameController.text.isEmpty,
                 onTap: () {
+                  if (_key.currentState!.validate() == false) {
+                    return;
+                  }
+
                   context.read<ScheduleController>().scheduleName =
-                      _nameController.text.trim();
+                      "${_nameController.text.trim()} schedule";
 
                   Navigator.push(
                     context,

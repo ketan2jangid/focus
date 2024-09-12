@@ -22,33 +22,27 @@ class ScheduleAppsSelectorScreen extends StatefulWidget {
 
 class _ScheduleAppsSelectorScreenState
     extends State<ScheduleAppsSelectorScreen> {
-  bool isLoading = false;
   List<int> selectedApps = [];
-  List<AppInfo> appsList = [];
+  // List<AppInfo> appsList = [];
 
-  @override
-  void initState() {
-    super.initState();
-
-    getInstalledApps();
-  }
-
-  Future<void> getInstalledApps() async {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-
-      appsList = await InstalledApps.getInstalledApps(true, true);
-
-      setState(() {
-        isLoading = false;
-      });
-    } catch (err) {}
-  }
+  // Future<void> getInstalledApps() async {
+  //   try {
+  //     setState(() {
+  //       isLoading = true;
+  //     });
+  //
+  //     appsList = await InstalledApps.getInstalledApps(true, true);
+  //
+  //     setState(() {
+  //       isLoading = false;
+  //     });
+  //   } catch (err) {}
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final appsList = context.watch<ScheduleController>().installedApps;
+
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0).copyWith(
@@ -82,12 +76,10 @@ class _ScheduleAppsSelectorScreenState
                   borderRadius: BorderRadius.circular(12),
                 ),
                 alignment: Alignment.center,
-                child: isLoading
+                child: appsList.isEmpty
                     ? Padding(
                         padding: const EdgeInsets.all(32.0),
-                        child: LinearProgressIndicator(
-                          color: Color(0xFF1E1E1E),
-                        ),
+                        child: Text("Loading installed apps"),
                       )
                     : GridView.builder(
                         padding: EdgeInsets.all(8),
@@ -161,11 +153,10 @@ class _ScheduleAppsSelectorScreenState
                 List<AppData> apps = [];
 
                 selectedApps.forEach((ind) {
-                  apps.add(AppData.fromJson({
-                    "name": appsList[ind].name,
-                    "package": appsList[ind].packageName,
-                    "icon": String.fromCharCodes(appsList[ind].icon!)
-                  }));
+                  apps.add(AppData(
+                      name: appsList[ind].name,
+                      package: appsList[ind].packageName,
+                      icon: String.fromCharCodes(appsList[ind].icon!)));
                 });
 
                 context.read<ScheduleController>().scheduleApps = apps;

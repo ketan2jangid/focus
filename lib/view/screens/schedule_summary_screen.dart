@@ -130,8 +130,8 @@ class _ScheduleSummaryScreenState extends State<ScheduleSummaryScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => ScheduleActiveScreen(
-                      scheduleName: 'work',
-                      scheduleDuration: 5 * 60,
+                      scheduleName: widget.scheduleData.name!,
+                      scheduleDuration: widget.scheduleData.duration! * 60,
                     ),
                   ),
                   (route) => false,

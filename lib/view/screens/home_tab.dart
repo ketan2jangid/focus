@@ -1,5 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:focus/controller/schedule_controller.dart';
 import 'package:focus/data/local_database.dart';
 import 'package:focus/model/schedule.dart';
 import 'package:focus/view/widgets/header.dart';
@@ -8,6 +9,7 @@ import 'package:focus/view/widgets/schedule_cards.dart';
 import 'package:focus/view/widgets/schedules_widget.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomeTab extends StatefulWidget {
   const HomeTab({super.key});
@@ -32,6 +34,11 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
     });
 
     print(_savedSchedules);
+
+    // LOAD LIST OF INSTALLED APPS
+    if (context.read<ScheduleController>().installedApps.isEmpty) {
+      context.read<ScheduleController>().loadInstalledApps();
+    }
   }
 
   @override

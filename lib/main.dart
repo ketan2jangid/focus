@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:focus/controller/schedule_controller.dart';
 import 'package:focus/data/local_database.dart';
+import 'package:focus/view/screens/focus_home.dart';
 import 'package:focus/view/screens/schedule_apps_selector_screen.dart';
 import 'package:focus/view/screens/home_tab.dart';
 import 'package:focus/view/screens/permission_screen.dart';
@@ -37,7 +38,8 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: Colors.white,
         ),
-        home: const PermissionScreen(),
+        // TODO: ADD ON GENERATE ROUTE, AND LOAD INITIAL SCREEN
+        home: const FocusHome(),
       ),
     );
   }
