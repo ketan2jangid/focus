@@ -1,12 +1,16 @@
 package com.kryptik.focus
 
+import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
+import android.view.accessibility.AccessibilityManager
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
@@ -40,6 +44,11 @@ class MainActivity: FlutterActivity() {
 //                "getUnlockCount" -> result.success(getTodayUnlockCount())
 //                "fullScreenOverlay" -> overlayService.showOverlay(fullScreen = true, message = "You can't use this app")
 //                "hideOverlay" -> overlayService.hideOverlay()
+                "isAccessibilityServiceEnabled" -> result.success(isAccessibilityServiceEnabled(this, AppBlockerService::class.java))
+                "requestAccessibilityPermission" -> {
+                    openAccessibilitySettings()
+                    result.success(null)
+                }
                 "hasOverlayPermission" -> result.success(PermissionsHandler.isOverlayPermissionGranted(this))
                 "requestOverlayPermission" -> PermissionsHandler.requestOverlayPermission(this)
                 "hasUsageStatsPermission" -> result.success(PermissionsHandler.hasUsageStatsPermission(this))
@@ -57,6 +66,27 @@ class MainActivity: FlutterActivity() {
                 else -> result.notImplemented()
             }
         }
+    }
+
+    private fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
+        val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val enabledServicesList = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+
+        for (enabledServiceInfo in enabledServicesList) {
+            val componentName = enabledServiceInfo.resolveInfo.serviceInfo.packageName + "/" + enabledServiceInfo.resolveInfo.serviceInfo.name
+            Log.d("AccessibilityCheck", "Enabled Service: $componentName")
+            if (componentName.equals("${context.packageName}/${service.name}", ignoreCase = true)) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private fun openAccessibilitySettings() {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     private fun gotoAutostartSetting() {

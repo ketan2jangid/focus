@@ -99,7 +99,7 @@ class _ScheduleDurationScreenState extends State<ScheduleDurationScreen> {
                     (route) => false);
               },
               text: "start",
-            ),
+            )
           ],
         ),
       ),

@@ -43,7 +43,7 @@ class OverlayService() {
                 val backgroundDrawable = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
                     cornerRadius = TypedValue.applyDimension(
-                        TypedValue.COMPLEX_UNIT_DIP, 12f, resources.displayMetrics
+                        TypedValue.COMPLEX_UNIT_DIP, 0f, resources.displayMetrics
                     )
                     setColor(Color.parseColor("#FFFFFFFF"))
                 }
@@ -52,7 +52,7 @@ class OverlayService() {
 
             // Create a TextView and add it to the LinearLayout
             val headerTextView = TextView(context).apply {
-                text = "The app is available between"
+                text = "FOCUS"
                 gravity = Gravity.CENTER
                 textSize = 16f
                 setTextColor(Color.parseColor("#1E1E1E"))
@@ -61,7 +61,7 @@ class OverlayService() {
             linearLayout.addView(headerTextView)
 
             val messageTextView = TextView(context).apply {
-                text = message
+                text = "App is Blocked"
                 gravity = Gravity.CENTER
                 textSize = 22f
                 setTextColor(Color.BLACK)
@@ -78,21 +78,21 @@ class OverlayService() {
                 setPadding(16, 24, 16, 16)
             }
             subtitleTextView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-            linearLayout.addView(subtitleTextView)
+//            linearLayout.addView(subtitleTextView)
 
             // Add the LinearLayout to the FrameLayout
             frameLayout.addView(linearLayout)
 
             // Create the button
             val button = Button(context).apply {
-                text = "✖ Close"
+                text = "CLOSE"
                 textSize = 16f
                 setTextColor(Color.WHITE)
 
                 val backgroundDrawable = GradientDrawable().apply {
                     shape = GradientDrawable.RECTANGLE
                     cornerRadius = 16f
-                    setColor(Color.parseColor("#2196F3"))
+                    setColor(Color.parseColor("#1E1E1E"))
                 }
                 background = backgroundDrawable
 
@@ -104,6 +104,9 @@ class OverlayService() {
                     startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     context.startActivity(startMain)
                     hideOverlay()
+
+                    overlayVisible = false
+                    invertBlocker()
                 }
             }
 

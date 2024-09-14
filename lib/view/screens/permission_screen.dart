@@ -19,12 +19,19 @@ List<Widget> permissionPages = [
     ),
   ),
   Text(
-    "we need access to apps usage stats to work. This allows us to detect when you use apps during focus mode",
+    "we need accessibility permission to work. This allows us to detect when you use apps during focus mode",
     style: GoogleFonts.montserrat(
       color: Color(0xFF1E1E1E),
       fontSize: 16,
     ),
   ),
+  // Text(
+  //   "we need access to apps usage stats to work. This allows us to detect when you use apps during focus mode",
+  //   style: GoogleFonts.montserrat(
+  //     color: Color(0xFF1E1E1E),
+  //     fontSize: 16,
+  //   ),
+  // ),
 ];
 
 class PermissionScreen extends StatefulWidget {
@@ -59,7 +66,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
   Future<void> _checkPermissionsStatus() async {
     final perms = await Future.wait([
       NativeFunctionsController.instance.hasOverlayPermission(),
-      NativeFunctionsController.instance.hasUsageStatsPermission(),
+      // NativeFunctionsController.instance.hasUsageStatsPermission(),
+      NativeFunctionsController.instance.hasAccessibilityPermission()
     ]);
 
     setState(() {
@@ -137,7 +145,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                 break;
                               case 1:
                                 await NativeFunctionsController.instance
-                                    .requestUsageStatsPermission();
+                                    .requestAccessibilityPermission();
                                 break;
                               default:
                                 return;

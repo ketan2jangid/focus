@@ -24,4 +24,13 @@ class NativeFunctionsController {
   Future<void> requestUsageStatsPermission() async {
     await _focusNativeBridge.invokeMethod("requestUsageStatsPermission");
   }
+
+  Future<bool> hasAccessibilityPermission() async {
+    return await _focusNativeBridge
+        .invokeMethod("isAccessibilityServiceEnabled");
+  }
+
+  Future<void> requestAccessibilityPermission() async {
+    await _focusNativeBridge.invokeMethod("requestAccessibilityPermission");
+  }
 }

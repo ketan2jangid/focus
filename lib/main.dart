@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: Colors.white,
         ),
         // TODO: ADD ON GENERATE ROUTE, AND LOAD INITIAL SCREEN
-        home: const FocusHome(),
+        home: const PermissionScreen(),
       ),
     );
   }
