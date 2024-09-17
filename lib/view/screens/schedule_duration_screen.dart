@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:focus/controller/native_functions_controller.dart';
 import 'package:focus/controller/schedule_controller.dart';
 import 'package:focus/model/app_data.dart';
 import 'package:focus/view/screens/schedule_active_screen.dart';

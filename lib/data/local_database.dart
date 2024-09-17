@@ -5,11 +5,14 @@ import 'package:focus/model/app_data.dart';
 import 'package:focus/model/schedule.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+/// TODO: DELETE,UPDATE SCHEDULE
 class LocalDatabase {
   static Box? _savedSchedules;
 
   static List<Schedule> get savedSchedules =>
       (_savedSchedules!.get(StorageKeys.schedulesList))?.cast<Schedule>() ?? [];
+  static Schedule? get activeSchedule =>
+      (_savedSchedules!.get(StorageKeys.activeSchedule));
 
   static Future<void> initialize() async {
     await Hive.initFlutter();
@@ -42,6 +45,14 @@ class LocalDatabase {
 
       return false;
     }
+  }
+
+  static Future<void> startSchedule(Schedule schedule) async {
+    await _savedSchedules!.put(StorageKeys.activeSchedule, schedule);
+  }
+
+  static Future<void> endSchedule() async {
+    await _savedSchedules!.delete(StorageKeys.activeSchedule);
   }
 
   static Future<void> clearData() async {}

@@ -7,6 +7,8 @@ import 'package:focus/model/schedule.dart';
 import 'package:installed_apps/app_info.dart';
 import 'package:installed_apps/installed_apps.dart';
 
+import 'native_functions_controller.dart';
+
 class ScheduleController extends ChangeNotifier {
   Schedule? _activeSchedule;
   String _scheduleName = "";
@@ -48,16 +50,35 @@ class ScheduleController extends ChangeNotifier {
     startSchedule(newSchedule);
   }
 
-  void startSchedule(Schedule schedule) {
+  Future<void> startSchedule(Schedule schedule) async {
     _activeSchedule = schedule;
+
+    List<String> packages = [];
+    for (AppData app in schedule.apps!) {
+      packages.add(app.package!);
+    }
+
+    await LocalDatabase.startSchedule(schedule);
+
+    await NativeFunctionsController.instance.startSchedule({
+      "name": schedule.name!,
+      "startTime": DateTime.now().millisecondsSinceEpoch.truncate(),
+      "endTime": DateTime.now().millisecondsSinceEpoch.truncate() +
+          (60000 * schedule.duration!),
+      "blockedApps": packages
+    });
 
     log("schedule started");
 
     notifyListeners();
   }
 
-  void endSchedule() {
+  Future<void> endSchedule() async {
     _activeSchedule = null;
+
+    await LocalDatabase.endSchedule();
+
+    await NativeFunctionsController.instance.endSchedule();
 
     log("schedule ended");
 

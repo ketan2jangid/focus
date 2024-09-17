@@ -17,11 +17,16 @@ import android.os.Looper
 import java.time.Duration
 import android.content.Intent
 import android.content.pm.PackageManager
+import java.time.Instant
+import java.time.ZoneId
+
+data class Schedule(val name: String, val startTime: Long, val endTime: Long, val blockedApps: List<String>)
 
 
 var overlayVisible: Boolean = false
 var canUnblock = false
 var canBlock = true
+var currentSchedule: Schedule? = null
 
 
 class AppBlockerService : AccessibilityService() {
@@ -111,31 +116,27 @@ class AppBlockerService : AccessibilityService() {
             val packageName = event.packageName?.toString()
             Log.d("current app", "Detected package: $packageName")
 
-            // Update current app package name
             currentApp = packageName ?: ""
 
-            // Block the app if necessary
             packageName?.let {
-                if (it == "com.google.android.youtube" && !overlayVisible) {
-                    blockApp()
+                if(currentSchedule != null) {
+                    val currentTime = LocalTime.now()
+
+                    val st = Instant.ofEpochMilli(currentSchedule!!.startTime)
+                    val startTime = st.atZone(ZoneId.systemDefault()).toLocalTime()
+                    val et = Instant.ofEpochMilli(currentSchedule!!.endTime)
+                    val endTime = et.atZone(ZoneId.systemDefault()).toLocalTime()
+
+                    if(currentTime.isBefore(endTime) && currentTime.isAfter(startTime) && currentSchedule!!.blockedApps.contains(it) && !overlayVisible) {
+                        blockApp()
+                    }
+
                 }
+//                if (it == "com.google.android.youtube" && !overlayVisible) {
+//                    blockApp()
+//                }
             }
         }
-
-//        if (event.eventType == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
-//            val packageName = event.packageName?.toString()
-//            currentApp = packageName!!
-//            Log.d("current app", "$packageName")
-//            // com.google.android.youtube
-//
-//            packageName?.let {
-//                if (it == "com.google.android.youtube" && !overlayVisible) {
-//                    blockApp("com.google.android.youtube")
-////                } else if (overlayVisible && it == launcher) {
-////                    unblockApp()
-//                }
-//            }
-//        }
     }
 
 

@@ -53,6 +53,26 @@ class MainActivity: FlutterActivity() {
                 "requestOverlayPermission" -> PermissionsHandler.requestOverlayPermission(this)
                 "hasUsageStatsPermission" -> result.success(PermissionsHandler.hasUsageStatsPermission(this))
                 "requestUsageStatsPermission" -> PermissionsHandler.requestUsageStatsPermission(this)
+                "startSchedule" -> {
+                    val scheduleJson = call.arguments as Map<String, Any>
+                    val name = scheduleJson["name"] as String
+                    val startTime = scheduleJson["startTime"] as Long
+                    val endTime = scheduleJson["endTime"] as Long
+                    val blockedApps = scheduleJson["blockedApps"] as List<String>
+
+                    Log.d("SCHEDULE", "Started: $name  $startTime $endTime $blockedApps");
+
+                    currentSchedule = Schedule(name = name, startTime = startTime, endTime = endTime.toLong(), blockedApps = blockedApps)
+
+                    result.success(null)
+                }
+                "endSchedule" -> {
+                    currentSchedule = null
+
+                    Log.d("SCHEDULE", "Ended");
+
+                    result.success(null)
+                }
 
 //                "setScreenTimeLimit" -> requestOverlayPermission()
 //                "setAppTimer" -> {

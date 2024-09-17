@@ -1,12 +1,14 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:focus/controller/schedule_controller.dart';
 import 'package:focus/model/schedule.dart';
 import 'package:focus/view/screens/schedule_active_screen.dart';
 import 'package:focus/view/widgets/buttons.dart';
 import 'package:focus/view/widgets/header.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleSummaryScreen extends StatefulWidget {
   final Schedule scheduleData;
@@ -125,7 +127,12 @@ class _ScheduleSummaryScreenState extends State<ScheduleSummaryScreen> {
             // SecondaryButton(onTap: () {}, text: "indefinite"),
             // Gap(18),
             PrimaryButton(
-              onTap: () {
+              onTap: () async {
+                await context.read<ScheduleController>().startSchedule(Schedule(
+                    name: widget.scheduleData.name,
+                    duration: widget.scheduleData.duration,
+                    apps: widget.scheduleData.apps));
+
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(

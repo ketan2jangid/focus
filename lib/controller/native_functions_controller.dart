@@ -33,4 +33,12 @@ class NativeFunctionsController {
   Future<void> requestAccessibilityPermission() async {
     await _focusNativeBridge.invokeMethod("requestAccessibilityPermission");
   }
+
+  Future<void> startSchedule(Map<String, dynamic> schedule) async {
+    await _focusNativeBridge.invokeMethod("startSchedule", schedule);
+  }
+
+  Future<void> endSchedule() async {
+    await _focusNativeBridge.invokeMethod("endSchedule");
+  }
 }

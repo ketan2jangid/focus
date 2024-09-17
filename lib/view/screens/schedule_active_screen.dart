@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:focus/controller/schedule_controller.dart';
 import 'package:focus/view/screens/schedule_completed_screen.dart';
 import 'package:focus/view/screens/schedule_ended_screen.dart';
 import 'package:focus/view/widgets/buttons.dart';
 import 'package:focus/view/widgets/header.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class ScheduleActiveScreen extends StatefulWidget {
   final String scheduleName;
@@ -63,14 +65,18 @@ class _ScheduleActiveScreenState extends State<ScheduleActiveScreen> {
             ),
             Spacer(),
             SecondaryButton(
-              onTap: () => Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ScheduleCompletedScreen(
-                    scheduleName: widget.scheduleName,
+              onTap: () async {
+                await context.read<ScheduleController>().endSchedule();
+
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ScheduleCompletedScreen(
+                      scheduleName: widget.scheduleName,
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
               text: "end now",
             ),
           ],
