@@ -11,7 +11,10 @@ import 'package:focus/view/screens/schedule_duration_screen.dart';
 import 'package:focus/view/screens/schedule_ended_screen.dart';
 import 'package:focus/view/screens/schedule_name_screen.dart';
 import 'package:focus/view/screens/schedule_summary_screen.dart';
+import 'package:focus/view/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'controller/native_functions_controller.dart';
 
 /// TODO: UPDATE README.md
 
@@ -21,8 +24,34 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  Future<Widget> _getInitialScreen() async {
+    final perms = await Future.wait([
+      NativeFunctionsController.instance.hasOverlayPermission(),
+      NativeFunctionsController.instance.hasAccessibilityPermission()
+    ]);
+
+    if ((perms[0] && perms[1]) == false) {
+      return PermissionScreen();
+    }
+
+    final activeSchedule = LocalDatabase.activeSchedule;
+    // final currentTime = DateTime.now().millisecondsSinceEpoch;
+
+    // TODO: CHECK IF ACTIVE SCHEDULE TIME IS COMPLETE
+    if (activeSchedule == null) {
+      return FocusHome();
+    }
+
+    return ScheduleActiveScreen(activeSchedule: activeSchedule);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +67,16 @@ class MyApp extends StatelessWidget {
         theme: ThemeData.light().copyWith(
           scaffoldBackgroundColor: Colors.white,
         ),
-        // TODO: ADD ON GENERATE ROUTE, AND LOAD INITIAL SCREEN
-        home: const PermissionScreen(),
+        home: FutureBuilder(
+          future: _getInitialScreen(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return snapshot.data!;
+            }
+
+            return SplashScreen();
+          },
+        ),
       ),
     );
   }

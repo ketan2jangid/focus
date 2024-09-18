@@ -55,7 +55,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
     super.initState();
 
     _pageController = PageController(initialPage: _currentPage);
-    _timer = Timer.periodic(const Duration(milliseconds: 2500),
+    _timer = Timer.periodic(const Duration(milliseconds: 2000),
         (timer) => _checkPermissionsStatus());
   }
 
@@ -137,9 +137,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                     builder: (context) => schedule == null
                                         ? FocusHome()
                                         : ScheduleActiveScreen(
-                                            scheduleName: schedule.name!,
-                                            scheduleDuration:
-                                                schedule.duration!),
+                                            activeSchedule: schedule,
+                                          ),
                                   ),
                                 );
                                 break;

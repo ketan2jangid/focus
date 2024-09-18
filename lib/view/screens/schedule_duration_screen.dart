@@ -89,12 +89,7 @@ class _ScheduleDurationScreenState extends State<ScheduleDurationScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => ScheduleActiveScreen(
-                        scheduleName:
-                            context.read<ScheduleController>().scheduleName,
-                        scheduleDuration: context
-                                .read<ScheduleController>()
-                                .scheduleDuration *
-                            60,
+                        activeSchedule: context.read<ScheduleController>().currentSchedule!,
                       ),
                     ),
                     (route) => false);
