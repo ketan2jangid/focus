@@ -8,7 +8,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../widgets/buttons.dart';
 
 class ScheduleEndedScreen extends StatelessWidget {
-  const ScheduleEndedScreen({super.key});
+  final String scheduleName;
+  const ScheduleEndedScreen({super.key, required this.scheduleName});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class ScheduleEndedScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Gap(36),
-            Header(title: "work schedule"),
+            Header(title: "$scheduleName schedule"),
             Spacer(
               flex: 2,
             ),

@@ -58,13 +58,16 @@ class ScheduleController extends ChangeNotifier {
       packages.add(app.package!);
     }
 
-    await LocalDatabase.startSchedule(schedule);
+    int startTime = DateTime.now().millisecondsSinceEpoch;
+    int endTime =
+        DateTime.now().millisecondsSinceEpoch + (60000 * schedule.duration!);
+
+    await LocalDatabase.startSchedule(schedule, startTime, endTime);
 
     await NativeFunctionsController.instance.startSchedule({
       "name": schedule.name!,
-      "startTime": DateTime.now().millisecondsSinceEpoch.truncate(),
-      "endTime": DateTime.now().millisecondsSinceEpoch.truncate() +
-          (60000 * schedule.duration!),
+      "startTime": startTime,
+      "endTime": endTime,
       "blockedApps": packages
     });
 

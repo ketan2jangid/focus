@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:focus/controller/schedule_controller.dart';
 import 'package:focus/data/local_database.dart';
@@ -43,14 +45,15 @@ class _MyAppState extends State<MyApp> {
     }
 
     final activeSchedule = LocalDatabase.activeSchedule;
-    // final currentTime = DateTime.now().millisecondsSinceEpoch;
+    final scheduleEndTime = LocalDatabase.endTime;
+    final currentTime = DateTime.now().millisecondsSinceEpoch;
 
-    // TODO: CHECK IF ACTIVE SCHEDULE TIME IS COMPLETE
-    if (activeSchedule == null) {
-      return FocusHome();
+    log("Schedule running: $activeSchedule $scheduleEndTime");
+    if (activeSchedule != null && currentTime < scheduleEndTime) {
+      return ScheduleActiveScreen(activeSchedule: activeSchedule);
     }
 
-    return ScheduleActiveScreen(activeSchedule: activeSchedule);
+    return FocusHome();
   }
 
   @override
@@ -70,6 +73,7 @@ class _MyAppState extends State<MyApp> {
         home: FutureBuilder(
           future: _getInitialScreen(),
           builder: (context, snapshot) {
+            log(snapshot.data.toString());
             if (snapshot.hasData) {
               return snapshot.data!;
             }

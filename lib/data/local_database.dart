@@ -13,6 +13,10 @@ class LocalDatabase {
       (_savedSchedules!.get(StorageKeys.schedulesList))?.cast<Schedule>() ?? [];
   static Schedule? get activeSchedule =>
       (_savedSchedules!.get(StorageKeys.activeSchedule));
+  static int get startTime =>
+      _savedSchedules!.get(StorageKeys.scheduleStartTime) ?? 0;
+  static int get endTime =>
+      _savedSchedules!.get(StorageKeys.scheduleEndTime) ?? 0;
 
   static Future<void> initialize() async {
     await Hive.initFlutter();
@@ -47,12 +51,17 @@ class LocalDatabase {
     }
   }
 
-  static Future<void> startSchedule(Schedule schedule) async {
+  static Future<void> startSchedule(
+      Schedule schedule, int startTime, int endTime) async {
     await _savedSchedules!.put(StorageKeys.activeSchedule, schedule);
+    await _savedSchedules!.put(StorageKeys.scheduleStartTime, startTime);
+    await _savedSchedules!.put(StorageKeys.scheduleEndTime, endTime);
   }
 
   static Future<void> endSchedule() async {
     await _savedSchedules!.delete(StorageKeys.activeSchedule);
+    await _savedSchedules!.delete(StorageKeys.scheduleStartTime);
+    await _savedSchedules!.delete(StorageKeys.scheduleEndTime);
   }
 
   static Future<void> clearData() async {}
