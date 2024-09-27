@@ -1,5 +1,7 @@
 package com.kryptik.focus
 
+import android.accessibilityservice.AccessibilityService
+import android.accessibilityservice.AccessibilityServiceInfo
 import android.annotation.TargetApi
 import android.app.AppOpsManager
 import android.app.usage.UsageStatsManager
@@ -10,6 +12,9 @@ import android.os.Build
 import android.provider.Settings
 import android.os.Process
 import android.content.pm.PackageManager
+import android.os.PowerManager
+import android.util.Log
+import android.view.accessibility.AccessibilityManager
 
 object PermissionsHandler {
     const val overlayPermissionCode = 101 // You can use this in MainActivity
@@ -50,4 +55,45 @@ object PermissionsHandler {
             context.startActivityForResult(intent, usageStatsPermissionCode)
         }
     }
+
+    // Method to check if Accessibility permission is granted
+    fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
+        val am = context.getSystemService(Context.ACCESSIBILITY_SERVICE) as AccessibilityManager
+        val enabledServicesList = am.getEnabledAccessibilityServiceList(AccessibilityServiceInfo.FEEDBACK_ALL_MASK)
+
+        for (enabledServiceInfo in enabledServicesList) {
+            val componentName = enabledServiceInfo.resolveInfo.serviceInfo.packageName + "/" + enabledServiceInfo.resolveInfo.serviceInfo.name
+            Log.d("AccessibilityCheck", "Enabled Service: $componentName")
+            if (componentName.equals("${context.packageName}/${service.name}", ignoreCase = true)) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    // Method to request Accessibility permission
+    fun openAccessibilitySettings(context: Context) {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }
+
+    // Method to check if battery optimization is disabled
+    fun isIgnoringBatteryOptimizations(context: Context): Boolean {
+        val pwrm = context.applicationContext.getSystemService(Context.POWER_SERVICE) as PowerManager
+        val name = context.applicationContext.packageName
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return pwrm.isIgnoringBatteryOptimizations(name)
+        }
+        return true
+    }
+
+    // Method to open battery optimization page
+    fun openBatteryOptimizationSettings(context: Context) {
+        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+        intent.data = Uri.parse("package:" + context.packageName)
+        context.startActivity(intent)
+    }
+
 }

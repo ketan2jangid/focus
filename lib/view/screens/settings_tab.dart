@@ -1,4 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/services.dart';
+import 'package:focus/controller/native_functions_controller.dart';
 import 'package:focus/view/widgets/settings_tile.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -23,8 +28,19 @@ class SettingsTab extends StatelessWidget {
               title: "focus settings",
             ),
             Gap(24),
-            SettingsTile(onTap: () {}, title: "about us"),
-            SettingsTile(onTap: () {}, title: "contact us"),
+            SettingsTile(
+                onTap: () async {
+                  final perm = await NativeFunctionsController.instance
+                      .isBatteryOptimizationDisabled();
+                  log(perm.toString());
+                },
+                title: "about us"),
+            SettingsTile(
+                onTap: () async {
+                  await NativeFunctionsController.instance
+                      .openBatteryOptimizationSettings();
+                },
+                title: "contact us"),
             SettingsTile(onTap: () {}, title: "rate us"),
             SettingsTile(onTap: () {}, title: "privacy policy"),
           ],

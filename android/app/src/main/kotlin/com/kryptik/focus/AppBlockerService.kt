@@ -2,6 +2,7 @@ package com.kryptik.focus
 
 import android.accessibilityservice.AccessibilityService
 import android.accessibilityservice.AccessibilityServiceInfo
+import android.annotation.TargetApi
 import android.util.Log
 import android.view.KeyEvent
 import android.view.accessibility.AccessibilityEvent
@@ -17,6 +18,7 @@ import android.os.Looper
 import java.time.Duration
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import java.time.Instant
 import java.time.ZoneId
 
@@ -37,7 +39,12 @@ class AppBlockerService : AccessibilityService() {
     private lateinit var overlayService: OverlayService
 
 
+    @TargetApi(Build.VERSION_CODES.ECLAIR)
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
 
+        return START_STICKY
+    }
 
     override fun onInterrupt() {
         // Handle interrupt
@@ -132,9 +139,6 @@ class AppBlockerService : AccessibilityService() {
                     }
 
                 }
-//                if (it == "com.google.android.youtube" && !overlayVisible) {
-//                    blockApp()
-//                }
             }
         }
     }
