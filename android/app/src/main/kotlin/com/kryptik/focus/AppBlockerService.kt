@@ -126,6 +126,10 @@ class AppBlockerService : AccessibilityService() {
             currentApp = packageName ?: ""
 
             packageName?.let {
+//                if(it == "com.android.chrome") {
+//                    blockApp()
+//                }
+
                 if(currentSchedule != null) {
                     val currentTime = LocalTime.now()
 

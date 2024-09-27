@@ -12,9 +12,12 @@ import android.provider.Settings
 import android.util.Log
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.NonNull
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
+import java.util.concurrent.TimeUnit
 
 
 class MainActivity: FlutterActivity() {
@@ -29,6 +32,10 @@ class MainActivity: FlutterActivity() {
 
 //        val serviceIntent = Intent(this, AppBlockerService::class.java)
 //        startForegroundService(serviceIntent)  // Updated to use AppBlockerService
+        // service restart
+//        val workRequest = PeriodicWorkRequestBuilder<ServiceCheckerWorker>(15, TimeUnit.MINUTES)
+//            .build()
+//        WorkManager.getInstance(this).enqueue(workRequest)
     }
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
