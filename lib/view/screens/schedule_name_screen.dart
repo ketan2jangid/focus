@@ -23,6 +23,7 @@ class _ScheduleNameScreenState extends State<ScheduleNameScreen> {
     super.initState();
 
     _nameController = TextEditingController();
+    _nameController.text = context.read<ScheduleController>().scheduleName;
   }
 
   @override

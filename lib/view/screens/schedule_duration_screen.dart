@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:focus/controller/native_functions_controller.dart';
 import 'package:focus/controller/schedule_controller.dart';
 import 'package:focus/model/app_data.dart';
+import 'package:focus/view/screens/focus_home.dart';
 import 'package:focus/view/screens/schedule_active_screen.dart';
 import 'package:focus/view/widgets/buttons.dart';
 import 'package:focus/view/widgets/duration_selector_wheel.dart';
@@ -83,18 +84,40 @@ class _ScheduleDurationScreenState extends State<ScheduleDurationScreen> {
                 context.read<ScheduleController>().scheduleDuration =
                     (_currentIndex + 1) * 5;
 
-                await context.read<ScheduleController>().saveSchedule();
+                if (context.read<ScheduleController>().updatingScheduleIndex !=
+                    -1) {
+                  await context.read<ScheduleController>().updateSchedule();
 
-                Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ScheduleActiveScreen(
-                        activeSchedule: context.read<ScheduleController>().currentSchedule!,
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FocusHome(),
                       ),
-                    ),
-                    (route) => false);
+                      (route) => false);
+                } else {
+                  await context.read<ScheduleController>().saveSchedule();
+
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ScheduleActiveScreen(
+                          activeSchedule: context
+                              .read<ScheduleController>()
+                              .currentSchedule!,
+                        ),
+                      ),
+                      (route) => false);
+                }
+
+                context.read<ScheduleController>().scheduleName = "";
+                context.read<ScheduleController>().scheduleApps = [];
+                context.read<ScheduleController>().scheduleDuration = 0;
+                context.read<ScheduleController>().updatingScheduleIndex = -1;
               },
-              text: "start",
+              text:
+                  context.read<ScheduleController>().updatingScheduleIndex != -1
+                      ? "update"
+                      : "start",
             )
           ],
         ),

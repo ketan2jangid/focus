@@ -23,21 +23,31 @@ class ScheduleAppsSelectorScreen extends StatefulWidget {
 class _ScheduleAppsSelectorScreenState
     extends State<ScheduleAppsSelectorScreen> {
   List<int> selectedApps = [];
-  // List<AppInfo> appsList = [];
 
-  // Future<void> getInstalledApps() async {
-  //   try {
-  //     setState(() {
-  //       isLoading = true;
-  //     });
-  //
-  //     appsList = await InstalledApps.getInstalledApps(true, true);
-  //
-  //     setState(() {
-  //       isLoading = false;
-  //     });
-  //   } catch (err) {}
-  // }
+  @override
+  void initState() {
+    super.initState();
+
+    _getSelectedApps();
+  }
+
+  void _getSelectedApps() {
+    final appsList = context.read<ScheduleController>().installedApps;
+    final scheduleApps = context.read<ScheduleController>().scheduleApps;
+
+    List<int> selectedPackages = [];
+    scheduleApps.forEach((app) {
+      int ind = appsList.indexWhere((a) => a.packageName == app.package);
+
+      if (ind != -1) {
+        selectedPackages.add(ind);
+      }
+    });
+
+    setState(() {
+      selectedApps = selectedPackages;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

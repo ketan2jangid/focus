@@ -10,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../widgets/header.dart';
 
+// TODO: ADD BATTERY OPTIMIZATION, AUTO START OPTIONS
 class SettingsTab extends StatelessWidget {
   const SettingsTab({super.key});
 
@@ -30,15 +31,15 @@ class SettingsTab extends StatelessWidget {
             Gap(24),
             SettingsTile(
                 onTap: () async {
-                  final perm = await NativeFunctionsController.instance
-                      .isBatteryOptimizationDisabled();
-                  log(perm.toString());
+                  // final perm = await NativeFunctionsController.instance
+                  //     .isBatteryOptimizationDisabled();
+                  // log(perm.toString());
                 },
                 title: "about us"),
             SettingsTile(
                 onTap: () async {
-                  await NativeFunctionsController.instance
-                      .openBatteryOptimizationSettings();
+                  // await NativeFunctionsController.instance
+                  //     .openBatteryOptimizationSettings();
                 },
                 title: "contact us"),
             SettingsTile(onTap: () {}, title: "rate us"),

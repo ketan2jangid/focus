@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:focus/controller/schedule_controller.dart';
@@ -39,6 +41,17 @@ class _HomeTabState extends State<HomeTab> with AutomaticKeepAliveClientMixin {
     if (context.read<ScheduleController>().installedApps.isEmpty) {
       context.read<ScheduleController>().loadInstalledApps();
     }
+  }
+
+  @override
+  void didChangeDependencies() {
+    final isTopOfNavigationStack = ModalRoute.of(context)?.isCurrent ?? false;
+
+    if (isTopOfNavigationStack) {
+      _getSchedules();
+    }
+
+    super.didChangeDependencies();
   }
 
   @override

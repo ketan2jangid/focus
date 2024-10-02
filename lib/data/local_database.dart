@@ -51,6 +51,20 @@ class LocalDatabase {
     }
   }
 
+  static Future<void> updateSchedule(Schedule schedule, int index) async {
+    try {
+      List<Schedule> schedules = savedSchedules;
+
+      schedules[index] = schedule;
+
+      await _savedSchedules!.put(StorageKeys.schedulesList, schedules);
+
+      log(schedules.length.toString());
+    } catch (err) {
+      print("ERR: something went wrong");
+    }
+  }
+
   static Future<void> startSchedule(
       Schedule schedule, int startTime, int endTime) async {
     await _savedSchedules!.put(StorageKeys.activeSchedule, schedule);
@@ -62,6 +76,13 @@ class LocalDatabase {
     await _savedSchedules!.delete(StorageKeys.activeSchedule);
     await _savedSchedules!.delete(StorageKeys.scheduleStartTime);
     await _savedSchedules!.delete(StorageKeys.scheduleEndTime);
+  }
+
+  static Future<void> deleteSchedule(int index) async {
+    final schedulesList = savedSchedules;
+    schedulesList.removeAt(index);
+
+    await _savedSchedules!.put(StorageKeys.schedulesList, schedulesList);
   }
 
   static Future<void> clearData() async {}

@@ -8,22 +8,20 @@ import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ScheduleCard extends StatelessWidget {
+  final Function()? onTap;
   final Schedule scheduleData;
   final Color cardColor;
 
   const ScheduleCard(
-      {super.key, required this.scheduleData, required this.cardColor});
+      {super.key,
+      required this.onTap,
+      required this.scheduleData,
+      required this.cardColor});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) =>
-              ScheduleSummaryScreen(scheduleData: scheduleData),
-        ),
-      ),
+      onTap: onTap,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
         decoration: BoxDecoration(

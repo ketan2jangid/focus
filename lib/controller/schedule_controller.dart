@@ -15,6 +15,7 @@ class ScheduleController extends ChangeNotifier {
   List<AppData> _selectedApps = [];
   int _duration = 0;
   List<AppInfo> _installedApps = [];
+  int updatingScheduleIndex = -1;
 
   String get scheduleName => _scheduleName;
   List<AppData> get scheduleApps => _selectedApps;
@@ -47,7 +48,14 @@ class ScheduleController extends ChangeNotifier {
     final success = await LocalDatabase.saveSchedule(newSchedule);
     log(success.toString());
 
-    startSchedule(newSchedule);
+    await startSchedule(newSchedule);
+  }
+
+  Future<void> updateSchedule() async {
+    final newSchedule = Schedule(
+        name: scheduleName, duration: scheduleDuration, apps: scheduleApps);
+
+    await LocalDatabase.updateSchedule(newSchedule, updatingScheduleIndex);
   }
 
   Future<void> startSchedule(Schedule schedule) async {
