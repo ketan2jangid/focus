@@ -1,16 +1,10 @@
 # focus
 
-A new Flutter project.
+An android app which allows you to focus on your work by blocking certain apps for specified duration. It is built using Flutter and Kotlin (uses method channel).
 
-## Getting Started
+### Setup project locally 
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone this repo to your local machine using `git clone https://github.com/ketan2jangid/focus.git`
+2. Navigate into the project directory `cd focus`
+3. Run `flutter pub get` to download all dependencies
+4. Run the project using `flutter run` on your preferred device.

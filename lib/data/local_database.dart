@@ -5,7 +5,6 @@ import 'package:focus/model/app_data.dart';
 import 'package:focus/model/schedule.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-/// TODO: DELETE,UPDATE SCHEDULE
 class LocalDatabase {
   static Box? _savedSchedules;
 
