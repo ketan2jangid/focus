@@ -4,4 +4,5 @@ class StorageKeys {
   static const String activeSchedule = "activeSchedule";
   static const String scheduleStartTime = "scheduleStartTime";
   static const String scheduleEndTime = "scheduleEndTime";
+  static const String blockNotifications = "blockNotifications";
 }

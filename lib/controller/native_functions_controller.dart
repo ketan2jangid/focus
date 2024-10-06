@@ -1,4 +1,5 @@
 import 'package:flutter/services.dart';
+import 'package:focus/data/local_database.dart';
 
 class NativeFunctionsController {
   static const _focusNativeBridge =
@@ -45,9 +46,22 @@ class NativeFunctionsController {
     await _focusNativeBridge.invokeMethod("disableBatteryOptimization");
   }
 
+  /// ********************   NOTIFICATIONS  ************************
+  Future<bool> hasNotificationsAccess() async {
+    return await _focusNativeBridge
+        .invokeMethod("hasReadNotificationPermission");
+  }
+
+  Future<void> requestNotificationsAccess() async {
+    await _focusNativeBridge.invokeMethod("requestReadNotificationsPermission");
+  }
+
   /// ********************   SCHEDULE  ************************
   Future<void> startSchedule(Map<String, dynamic> schedule) async {
-    await _focusNativeBridge.invokeMethod("startSchedule", schedule);
+    await _focusNativeBridge.invokeMethod("startSchedule", {
+      ...schedule,
+      "blockNotifications": LocalDatabase.blockNotificationsPreference
+    });
   }
 
   Future<void> endSchedule() async {

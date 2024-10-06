@@ -16,6 +16,8 @@ class LocalDatabase {
       _savedSchedules!.get(StorageKeys.scheduleStartTime) ?? 0;
   static int get endTime =>
       _savedSchedules!.get(StorageKeys.scheduleEndTime) ?? 0;
+  static bool get blockNotificationsPreference =>
+      _savedSchedules!.get(StorageKeys.blockNotifications) ?? false;
 
   static Future<void> initialize() async {
     await Hive.initFlutter();
@@ -82,6 +84,10 @@ class LocalDatabase {
     schedulesList.removeAt(index);
 
     await _savedSchedules!.put(StorageKeys.schedulesList, schedulesList);
+  }
+
+  static Future<void> updateNotificationsBlockingPreference() async {
+    await _savedSchedules!.put(StorageKeys.blockNotifications, !blockNotificationsPreference);
   }
 
   static Future<void> clearData() async {}

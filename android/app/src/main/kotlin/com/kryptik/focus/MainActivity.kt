@@ -9,9 +9,11 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
+import android.service.notification.NotificationListenerService
 import android.util.Log
 import android.view.accessibility.AccessibilityManager
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import io.flutter.embedding.android.FlutterActivity
@@ -22,35 +24,22 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity: FlutterActivity() {
     private val CHANNEL = "focus-native-kotlin-channel"
-//    private lateinit var overlayService: OverlayService
-//    private val overlayPermissionCode = 2084
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        overlayService = OverlayService(this)
 
-//        val serviceIntent = Intent(this, AppBlockerService::class.java)
-//        startForegroundService(serviceIntent)  // Updated to use AppBlockerService
         // service restart
 //        val workRequest = PeriodicWorkRequestBuilder<ServiceCheckerWorker>(15, TimeUnit.MINUTES)
 //            .build()
 //        WorkManager.getInstance(this).enqueue(workRequest)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
         MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL).setMethodCallHandler { call, result ->
             when(call.method) {
-//                "startService" -> {
-//                    startService(Intent(this, AppDetectionService::class.java))
-//                    Log.d("Foreground service", "Started")
-//                    result.success(null)
-//                }
-//                "getUnlockCount" -> result.success(getTodayUnlockCount())
-//                "fullScreenOverlay" -> overlayService.showOverlay(fullScreen = true, message = "You can't use this app")
-//                "hideOverlay" -> overlayService.hideOverlay()
                 "isAccessibilityServiceEnabled" -> result.success(PermissionsHandler.isAccessibilityServiceEnabled(this, AppBlockerService::class.java))
                 "requestAccessibilityPermission" -> {
                     PermissionsHandler.openAccessibilitySettings(this)
@@ -58,7 +47,9 @@ class MainActivity: FlutterActivity() {
                 }
                 "hasOverlayPermission" -> result.success(PermissionsHandler.isOverlayPermissionGranted(this))
                 "requestOverlayPermission" -> PermissionsHandler.requestOverlayPermission(this)
-                "hasUsageStatsPermission" -> result.success(PermissionsHandler.hasUsageStatsPermission(this))
+                "hasReadNotificationPermission" -> result.success(PermissionsHandler.isNotificationServiceEnabled(this))
+                "requestReadNotificationsPermission" -> PermissionsHandler.openReadNotificationSetting(this)
+                "hasUsageStatsPermission" -> result.success(PermissionsHandler.isNotificationServiceEnabled(this))
                 "requestUsageStatsPermission" -> PermissionsHandler.requestUsageStatsPermission(this)
                 "startSchedule" -> {
                     val scheduleJson = call.arguments as Map<String, Any>
@@ -66,15 +57,32 @@ class MainActivity: FlutterActivity() {
                     val startTime = scheduleJson["startTime"] as Long
                     val endTime = scheduleJson["endTime"] as Long
                     val blockedApps = scheduleJson["blockedApps"] as List<String>
+                    val notificationsBlocked = scheduleJson["blockNotifications"] as Boolean
 
                     Log.d("SCHEDULE", "Started: $name  $startTime $endTime $blockedApps");
+                    Log.d("NOTIFICATION BLOCK", "$blockNotifications");
 
                     currentSchedule = Schedule(name = name, startTime = startTime, endTime = endTime.toLong(), blockedApps = blockedApps)
+                    blockNotifications = notificationsBlocked
+
+                    if (notificationsBlocked ) {
+                        if(!PermissionsHandler.isNotificationServiceEnabled(context)) {
+                            PermissionsHandler.openReadNotificationSetting(context)
+                        }
+
+                        val intent1 = Intent(this, NotificationBlockerService::class.java)
+                        startService(intent1)
+
+
+                        val intent = Intent("com.kryptik.focus.BLOCK_NOTIFICATIONS")
+                        sendBroadcast(intent)
+                    }
 
                     result.success(null)
                 }
                 "endSchedule" -> {
                     currentSchedule = null
+                    blockNotifications = false
 
                     Log.d("SCHEDULE", "Ended");
 
@@ -86,16 +94,6 @@ class MainActivity: FlutterActivity() {
                     result.success(null)
                 }
                 "checkBatteryOptimization" -> result.success(PermissionsHandler.isIgnoringBatteryOptimizations(this))
-
-
-//                "setScreenTimeLimit" -> requestOverlayPermission()
-//                "setAppTimer" -> {
-//                    val timers = call.arguments as List<Map<String, Any>>
-//                    Log.d("received", timers.toString())
-//
-//                    appTimers = timers.toMutableList()
-//                    result.success(true)
-//                }
 //                "openAutostartPermission" -> gotoAutostartSetting()
                 else -> result.notImplemented()
             }
@@ -158,7 +156,6 @@ class MainActivity: FlutterActivity() {
             }
             startActivity(intent)
         } catch (e: Exception) {
-            /*Timber.e(e)*/
             Log.e("AUTOSTART SETTING", "Error while opening autostart setting: $e")
         }
     }

@@ -96,4 +96,16 @@ object PermissionsHandler {
         context.startActivity(intent)
     }
 
+    // Method to check if notification blocking permission
+    fun isNotificationServiceEnabled(context: Context): Boolean {
+        val pkgName = context.packageName
+        val flat = Settings.Secure.getString(context.contentResolver, "enabled_notification_listeners")
+        return flat?.contains(pkgName) == true
+    }
+
+    // Method to request read notification permission
+    fun openReadNotificationSetting(context: Context) {
+        val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+        context.startActivity(intent)
+    }
 }
